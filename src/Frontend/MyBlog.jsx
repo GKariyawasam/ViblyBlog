@@ -53,7 +53,6 @@ const MyBlog = () => {
             <h4 className="text-sm text-gray-500 mt-3">{new Date(blog.date).toLocaleString()}</h4>
 
             <div className='flex items-center mt-4'>
-              {/* <button onClick={() => handleUpdate(blog.blogid)} className='bg-green-800 text-white px-4 py-2 rounded flex flex-col w-30'><Link to={`/updateblog/${blog.blogid}`}><CiEdit />Edit</Link></button> */}
               <button onClick={() => handleUpdate(blog.blogid)} className='bg-green-800  w-25 text-white px-4 py-2 rounded flex'><CiEdit className='mt-1 gap-1.5 ml-2.5'/>Edit</button>
               <button onClick={() => handleDelete(blog.blogid)} className='bg-red-500 w-25 text-white px-4 py-2 ml-4 rounded flex'><RiDeleteBin6Line className='mt-1 gap-1.5'/>Delete</button>
             </div>

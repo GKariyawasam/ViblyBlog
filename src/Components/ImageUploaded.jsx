@@ -1,39 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const ImageUploaded = ({ setFieldValue }) => {
-    const [preview, setPreview] = useState(null);
-  
-    const handleImageChange = (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-  
-      setFieldValue('image', file);
-  
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    };
-  
-    return (
-      <div className="w-full mx-auto p-4 border rounded shadow-md mt-5">
-        <label className="block mb-2 text-sm font-medium text-gray-700">Upload Image</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="mb-4 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-        />
+const ImageUploaded = ({ setFieldValue, resetTrigger }) => {
+  const [preview, setPreview] = useState(null);
+  const [fileName, setFileName] = useState("No file chosen");
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFieldValue("image", file);
+      setPreview(URL.createObjectURL(file));
+      setFileName(file.name);
+    }
+  };
+
+  useEffect(() => {
+    setPreview(null);
+    setFileName("No file chosen");
+  }, [resetTrigger]);
+
+  return (
+    <div className="mt-4">
+      <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
+      <div className="flex items-center space-x-4">
+        <div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+          />
+          <p className="mt-1 text-sm text-gray-500">{fileName}</p>
+        </div>
         {preview && (
-          <div className="mt-4">
-            <p className="text-sm text-gray-600 mb-2">Image Preview:</p>
-            <img src={preview} alt="Preview" className="w-full h-auto rounded border" />
-          </div>
+          <img
+            src={preview}
+            alt="Selected preview"
+            className="w-20 h-20 object-cover rounded border"
+          />
         )}
       </div>
-    );
-  };
-  
+    </div>
+  );
+};
 
 export default ImageUploaded;

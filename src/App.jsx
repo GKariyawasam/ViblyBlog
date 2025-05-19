@@ -8,6 +8,17 @@ import Profile from './Frontend/Profile'
 import MyBlog from './Frontend/MyBlog'
 import UpdateBlog from './Frontend/UpdateBlog'
 import BlogDetail from './Frontend/BlogDetail'
+import Admin from './Frontend/Admin'
+import AdminUpdate from './Frontend/AdminUpdate';
+
+
+const ProtectedRoute = ({ children }) => {
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  if (!isAdmin) {
+    return <Navigate to="/admin" replace />;
+  }
+  return children;
+};
 
 const App = () => {
   return (
@@ -21,6 +32,15 @@ const App = () => {
         <Route path='/profile' element={<Profile />}></Route>
         <Route path='/updateblog/:id' element={<UpdateBlog />}></Route>
         <Route path='/blogdetail/:id' element={<BlogDetail />}></Route>
+        <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+        <Route path='adminupdate/:id' element={<AdminUpdate />} />
       </Routes>
     </Router>
   );

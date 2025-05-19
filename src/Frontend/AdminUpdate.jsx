@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import JoditEditor from 'jodit-react';
-import Header from '../Components/Header';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import ImageUploaded from '../Components/ImageUploaded';
 
-const UpdateBlog = () => {
+const AdminUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const editor = useRef(null);
@@ -66,7 +65,7 @@ const UpdateBlog = () => {
       const res = await axios.put(`http://localhost:8081/api/myblog/${id}`, formData);
       if (res.status === 200) {
         toast.success('Blog updated successfully!');
-        setTimeout(() => navigate('/myblog'), 2000);
+        setTimeout(() => navigate('/admin'), 2000);
       }
     } catch (err) {
       console.error('Update error:', err);
@@ -78,7 +77,6 @@ const UpdateBlog = () => {
 
   return (
     <div>
-      <Header />
       <Formik
         initialValues={initialValues}
         enableReinitialize
@@ -125,4 +123,4 @@ const UpdateBlog = () => {
   );
 };
 
-export default UpdateBlog;
+export default AdminUpdate;

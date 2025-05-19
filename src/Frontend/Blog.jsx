@@ -97,11 +97,11 @@ const Blog = () => {
               className="w-full p-2 mb-4 border border-gray-300 rounded"
             >
               <option value="" label="Select Your Blog Category" />
-              <option value="Life" label="Life Style" />
+              <option value="Life Style" label="Life Style" />
               <option value="Travel" label="Travel" />
-              <option value="Food" label="Food & Recipes" />
-              <option value="Tech" label="Technology" />
-              <option value="Fashion" label="Fashion & Beauty" />
+              <option value="Food & Recipes" label="Food & Recipes" />
+              <option value="Technology" label="Technology" />
+              <option value="Fashion & Beauty" label="Fashion & Beauty" />
             </Field>
 
             <JoditEditor

@@ -52,6 +52,18 @@ app.post('/api/register', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
+
+   const adminUsername = "viblyblog";
+  const adminPassword = "Admin@123";
+
+  if (username === adminUsername && password === adminPassword) {
+    return res.status(200).json({
+      message: "Admin login successful",
+      isAdmin: true,
+    });
+  }
+
+
   const sql = 'SELECT * FROM registration WHERE username = ? AND password = ?';
   db.query(sql, [username, password], (err, result) => {
     if (err) return res.status(500).json({ message: 'Server error' });
@@ -59,6 +71,7 @@ app.post('/api/login', (req, res) => {
       const user = result[0];
       return res.status(200).json({
         message: 'Login success',
+        isAdmin: false,
         userId: user.id,
         username: user.username,
         email: user.email
@@ -89,11 +102,25 @@ app.post('/api/blogs', upload.single('image'), (req, res) => {
   });
 });
 
-app.get("/api/blogs", (req,res) => {
-  const sql = "SELECT * FROM blogpost ORDER BY date DESC";
-  db.query(sql, (err, result) => {
-    if (err) return res.status(500).json({message: "Databse error"});
-    res.status(200).json(result);
+app.get('/blogs', (req, res) => {
+  const category = req.query.category;
+
+  let query = "SELECT * FROM blogpost";
+  let queryParams = [];
+
+  if (category && category !== 'All') {
+    query += " WHERE category = ?";
+    queryParams.push(category);
+  }
+
+  query += " ORDER BY date DESC";
+
+  db.query(query, queryParams, (err, result) => {
+    if (err) {
+      console.error('Error fetching blogs:', err);
+      return res.status(500).json({ error: 'Error fetching blogs' });
+    }
+    res.json(result);
   });
 });
 
@@ -190,6 +217,33 @@ app.post("/api/author", upload.single("profile_picture"), (req, res) => {
         return res.status(200).json({ message: "Profile created" });
       });
     }
+  });
+});
+
+app.get('/search', (req, res) => {
+  const query = req.query.query;
+
+  if (!query || query.trim() === '') {
+    return res.status(400).json({ error: "Search query is required" });
+  }
+
+  const sql = "SELECT * FROM blogpost WHERE title LIKE ? ORDER BY date DESC";
+  db.query(sql, [`%${query}%`], (err, result) => {
+    if (err) {
+      console.error("Search error:", err);
+      return res.status(500).json({ error: "Search failed" });
+    }
+
+    res.status(200).json(result);
+  });
+});
+
+app.get('/search', (req, res) => {
+  const query = req.query.query;
+  const sql = "SELECT * FROM blogs WHERE title LIKE ?";
+  db.query(sql, [`%${query}%`], (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
   });
 });
 

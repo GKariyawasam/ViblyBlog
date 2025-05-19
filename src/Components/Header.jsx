@@ -67,7 +67,6 @@ const Header = () => {
         </ul>
       </div>
 
-      {/* ✅ Render modal */}
       {isModalOpen && (
         <ProfileModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       )}

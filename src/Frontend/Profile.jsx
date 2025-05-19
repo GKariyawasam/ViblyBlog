@@ -1,9 +1,8 @@
-// pages/Profile.jsx
 import React, { useState } from 'react';
 import ProfileModal from '../Components/ProfileModel'
 
 const Profile = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true); // Open by default or trigger via a button
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   return (
     <div>

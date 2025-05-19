@@ -21,19 +21,25 @@ const Login = () => {
             const { username, password } = values;
 
             const res = await axios.post("http://localhost:8081/api/login", { username, password });
-            const { userId, username: returnedUsername, email } = res.data;
+            const { isAdmin, userId, username: returnedUsername, email } = res.data;
 
-            localStorage.setItem("userId", userId);
-            localStorage.setItem("username", returnedUsername);
-            localStorage.setItem("email", email);
-            
-            if (res.status == 200){
-              toast.success("Login successful!");
-              setTimeout(() =>{
+             if (isAdmin) {
+              localStorage.setItem("isAdmin", "true");
+              toast.success("Admin Login Successful");
+              setTimeout(() => {
+                navigate("/admin");
+              }, 900);
+            } else {
+              localStorage.setItem("isAdmin", "false");
+              localStorage.setItem("userId", userId);
+              localStorage.setItem("username", username);
+              localStorage.setItem("email", email);
+
+              toast.success("Login Successful");
+              setTimeout(() => {
                 navigate("/home");
-              },1000)
-            } 
-
+              }, 900);
+            }
           } catch (error) {
             if(error.response?.status == 401){
               toast.error("Invalid username or password");
